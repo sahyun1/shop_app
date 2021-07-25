@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/providers/cart_provider.dart';
 import 'package:flutter_complete_guide/screens/product_detail_screen.dart';
+import 'package:provider/provider.dart';
 
 class ProductItem extends StatelessWidget {
   // const ProductItem({ Key? key }) : super(key: key);
@@ -7,17 +9,20 @@ class ProductItem extends StatelessWidget {
   final String id;
   final String title;
   final String imageUrl;
+  final double price;
 
-  const ProductItem(this.id, this.title, this.imageUrl);
+  const ProductItem(this.id, this.title, this.imageUrl, this.price);
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamed(ProductDetailScreen.ROUTE_NAME, arguments:id);
+            Navigator.of(context)
+                .pushNamed(ProductDetailScreen.ROUTE_NAME, arguments: id);
             // Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
             //   return ProductDetailScreen();
             // }));
@@ -36,7 +41,7 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
             color: Theme.of(context).accentColor,
-            onPressed: () {},
+            onPressed: () => cartProvider.addItem(id, price, title),
           ),
           backgroundColor: Colors.black87,
           title: Text(
