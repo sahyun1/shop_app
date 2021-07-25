@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/drawer_widget.dart';
 import '../providers/cart_provider.dart';
 import 'cart_screen.dart';
 import '../widgets/badge.dart';
@@ -9,6 +10,8 @@ enum FilterOptions { Favourite, All }
 
 class ProductsOverviewScreen extends StatelessWidget {
   // const ProductsOverviewScreen({ Key? key }) : super(key: key);
+
+  static const PAGE_ROUTE = '/';
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,7 @@ class ProductsOverviewScreen extends StatelessWidget {
           )
         ],
       ),
+      drawer: DrawerWidget(),
       body: ProductsGrid(),
     );
   }
