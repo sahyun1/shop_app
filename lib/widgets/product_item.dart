@@ -33,15 +33,30 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         footer: GridTileBar(
-          leading: IconButton(
-            icon: Icon(Icons.favorite),
-            color: Theme.of(context).accentColor,
-            onPressed: () {},
-          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.favorite),
+          //   color: Theme.of(context).accentColor,
+          //   onPressed: () {},
+          // ),
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
             color: Theme.of(context).accentColor,
-            onPressed: () => cartProvider.addItem(id, price, title),
+            onPressed: () {
+              cartProvider.addItem(id, price, title);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'Added item to cart',
+                  //textAlign: TextAlign.center,
+                ),
+                duration: Duration(seconds: 2),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    cartProvider.removeSingleQuantityItem(id);
+                  },
+                ),
+              ));
+            },
           ),
           backgroundColor: Colors.black87,
           title: Text(
