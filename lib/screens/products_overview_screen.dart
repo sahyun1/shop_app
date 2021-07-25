@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/providers/cart_provider.dart';
-import 'package:flutter_complete_guide/widgets/badge.dart';
 import 'package:provider/provider.dart';
+import '../providers/cart_provider.dart';
+import 'cart_screen.dart';
+import '../widgets/badge.dart';
 import '../widgets/products_grid.dart';
 
 enum FilterOptions { Favourite, All }
@@ -33,7 +34,8 @@ class ProductsOverviewScreen extends StatelessWidget {
                 Badge(child: child, value: cartProvider.itemCount.toString()),
             child: IconButton(
               icon: Icon(Icons.shopping_cart),
-              onPressed: null,
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(CartScreen.ROUTE_NAME),
             ),
           )
         ],
