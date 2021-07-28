@@ -43,17 +43,19 @@ class ProductProvider with ChangeNotifier {
     return [..._items];
   }
 
-  void addItem(Product product) {
+  Future<void> addItem(Product product) {
     final url = Uri.https(
         'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
         'products.json');
+    // final url = Uri.parse(
+    //     'https://udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
     final jsonObj = json.encode({
       'title': product.title,
       'description': product.description,
       'imageUrl': product.imageUrl,
       'price': product.price
     });
-    http.post(url, body: jsonObj).then((response) {
+    return http.post(url, body: jsonObj).then((response) {
       print(json.decode(response.body));
       _items.add(Product(
         description: product.description,
@@ -63,6 +65,9 @@ class ProductProvider with ChangeNotifier {
         title: product.title,
       ));
       notifyListeners();
+    }).catchError((error) {
+      print(error);
+      throw error;
     });
   }
 
