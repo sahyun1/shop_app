@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
   List<Product> _items = [
@@ -42,14 +44,26 @@ class ProductProvider with ChangeNotifier {
   }
 
   void addItem(Product product) {
-    _items.add(Product(
-      description: product.description,
-      id: DateTime.now().toString(),
-      imageUrl: product.imageUrl,
-      price: product.price,
-      title: product.title,
-    ));
-    notifyListeners();
+    final url = Uri.https(
+        'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
+        'products.json');
+    final jsonObj = json.encode({
+      'title': product.title,
+      'description': product.description,
+      'imageUrl': product.imageUrl,
+      'price': product.price
+    });
+    http.post(url, body: jsonObj).then((response) {
+      print(json.decode(response.body));
+      _items.add(Product(
+        description: product.description,
+        id: json.decode(response.body)['name'],
+        imageUrl: product.imageUrl,
+        price: product.price,
+        title: product.title,
+      ));
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product newProduct) {
