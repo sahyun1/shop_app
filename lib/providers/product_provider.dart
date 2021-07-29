@@ -51,6 +51,9 @@ class ProductProvider with ChangeNotifier {
       final response = await http.get(url);
       print(response.body);
       final extractData = json.decode(response.body) as Map<String, dynamic>;
+      if (extractData != null) {
+        return;
+      }
       final List<Product> fetchedItems = [];
       if (extractData != null) {
         extractData.forEach((key, value) {
@@ -77,8 +80,7 @@ class ProductProvider with ChangeNotifier {
     final url = Uri.https(
         'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
         'products.json');
-    // final url = Uri.parse(
-    //     'https://udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
+
     final jsonObj = json.encode({
       'title': product.title,
       'description': product.description,
@@ -104,13 +106,30 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product product) async {
+    final url = Uri.https(
+        'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
+        'products/$id.json');
+
+    final jsonObj = json.encode({
+      'title': product.title,
+      'description': product.description,
+      'imageUrl': product.imageUrl,
+      'price': product.price
+    });
+
+    await http.patch(url, body: jsonObj);
+
     final index = _items.indexWhere((element) => element.id == id);
-    _items[index] = newProduct;
+    _items[index] = product;
     notifyListeners();
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
+    final url = Uri.https(
+        'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
+        'products/$id.json');
+    await http.delete(url);
     _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }

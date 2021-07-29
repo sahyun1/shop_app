@@ -71,11 +71,8 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
       });
 
       if (_editedProduct.id != null) {
-        Provider.of<ProductProvider>(context, listen: false)
+        await Provider.of<ProductProvider>(context, listen: false)
             .updateProduct(_editedProduct.id, _editedProduct);
-        setState(() {
-          isLoading = false;
-        });
       } else {
         try {
           await Provider.of<ProductProvider>(context, listen: false)
@@ -98,13 +95,18 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                   ],
                 );
               });
-        } finally {
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.pop(context);
         }
+        //  finally {
+        //   setState(() {
+        //     isLoading = false;
+        //   });
+        //   Navigator.pop(context);
+        // }
       }
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pop(context);
     }
   }
 
@@ -205,7 +207,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                             ),
                           ),
                           child: _imageUrlController.text.isEmpty
-                              ? Text('Enter a URL')
+                              ? const Text('Enter a URL')
                               : FittedBox(
                                   child: Image.network(
                                     _imageUrlController.text,

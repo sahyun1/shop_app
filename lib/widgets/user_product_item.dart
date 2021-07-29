@@ -29,7 +29,7 @@ class UserProductItem extends StatelessWidget {
                       arguments: id);
                 },
                 icon: Icon(Icons.edit),
-                color: Theme.of(context).accentColor),
+                color: Theme.of(context).primaryColor),
             IconButton(
                 onPressed: () =>
                     Provider.of<ProductProvider>(context, listen: false)
