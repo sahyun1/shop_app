@@ -12,14 +12,21 @@ class OrderProvider with ChangeNotifier {
     return [..._orders];
   }
 
+  final String _token;
+  final String _userId;
+
+  OrderProvider(this._token, this._orders, this._userId);
+
   Future<void> retrieveOrders() async {
+    final _params = <String, String>{'auth': _token};
     final url = Uri.https(
         'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
-        'orders.json');
+        '/orders.json/',
+        _params);
 
     final response = await http.get(url);
     final responeBody = json.decode(response.body) as Map<String, dynamic>;
-    if (responeBody != null) {
+    if (responeBody == null) {
       return;
     }
     final List<OrderItem> fetchedList = [];
@@ -40,9 +47,11 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> items, double total) async {
+    final _params = <String, String>{'auth': _token};
     final url = Uri.https(
         'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
-        'orders.json');
+        '/orders.json/',
+        _params);
     final timestamp = DateTime.now();
 
     final jsonObj = json.encode({

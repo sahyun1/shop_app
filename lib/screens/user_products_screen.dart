@@ -12,12 +12,12 @@ class UserProductsScreen extends StatelessWidget {
 //
 
   Future<void> _getLatestList(BuildContext context) async {
-    await Provider.of<ProductProvider>(context, listen: false).fetchItems();
+    await Provider.of<ProductProvider>(context, listen: false).fetchItems(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final productProvider = Provider.of<ProductProvider>(context);
+    // final productProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
       drawer: DrawerWidget(),
       appBar: AppBar(
@@ -30,24 +30,34 @@ class UserProductsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () => _getLatestList(context),
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: ListView.builder(
-            itemCount: productProvider.items.length,
-            itemBuilder: (_, i) => Column(
-              children: [
-                UserProductItem(
-                  productProvider.items[i].id,
-                  productProvider.items[i].title,
-                  productProvider.items[i].imageUrl,
-                ),
-                Divider()
-              ],
-            ),
-          ),
-        ),
+      body: FutureBuilder(
+        future: _getLatestList(context),
+        builder: (ctx, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () => _getLatestList(context),
+                    child: Consumer<ProductProvider>(
+                      builder: (ctx, productProvider, _) => Padding(
+                        padding: EdgeInsets.all(8),
+                        child: ListView.builder(
+                          itemCount: productProvider.items.length,
+                          itemBuilder: (_, i) => Column(
+                            children: [
+                              UserProductItem(
+                                productProvider.items[i].id,
+                                productProvider.items[i].title,
+                                productProvider.items[i].imageUrl,
+                              ),
+                              Divider()
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
       ),
     );
   }

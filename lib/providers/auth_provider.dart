@@ -6,8 +6,28 @@ import 'package:http/http.dart' as http;
 
 class AuthProvider with ChangeNotifier {
   String _token;
-  DateTime expireDate;
+  DateTime _expireDate;
   String _userId;
+
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (_expireDate != null &&
+        _expireDate.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
+
+  String get userId {
+    if (token != null) {
+      return _userId;
+    }
+    return null;
+  }
 
   Future<void> _authenticate(String email, String password, url) async {
     try {
@@ -20,6 +40,11 @@ class AuthProvider with ChangeNotifier {
       if (json.decode(response.body)['error'] != null) {
         throw HttpException(json.decode(response.body)['error']['message']);
       }
+      _token = json.decode(response.body)['idToken'];
+      _userId = json.decode(response.body)['localId'];
+      _expireDate = DateTime.now().add(Duration(
+          seconds: int.parse(json.decode(response.body)['expiresIn'])));
+      notifyListeners();
     } catch (error) {
       throw (error);
     }
