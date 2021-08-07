@@ -27,12 +27,15 @@ class ProductItem extends StatelessWidget {
               //   return ProductDetailScreen();
               // }));
             },
-            child: FadeInImage(
-              placeholder: AssetImage("assets/images/product-placeholder.png"),
-              image: NetworkImage(
-                imageUrl,
+            child: Hero(
+              tag: id,
+              child: FadeInImage(
+                placeholder: AssetImage("assets/images/product-placeholder.png"),
+                image: NetworkImage(
+                  imageUrl,
+                ),
+                fit: BoxFit.cover,
               ),
-              fit: BoxFit.cover,
             )),
         footer: GridTileBar(
           // leading: IconButton(
