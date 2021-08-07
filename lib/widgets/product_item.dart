@@ -20,18 +20,20 @@ class ProductItem extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         child: GestureDetector(
-          onTap: () {
-            Navigator.of(context)
-                .pushNamed(ProductDetailScreen.ROUTE_NAME, arguments: id);
-            // Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-            //   return ProductDetailScreen();
-            // }));
-          },
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-          ),
-        ),
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(ProductDetailScreen.ROUTE_NAME, arguments: id);
+              // Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+              //   return ProductDetailScreen();
+              // }));
+            },
+            child: FadeInImage(
+              placeholder: AssetImage("assets/images/product-placeholder.png"),
+              image: NetworkImage(
+                imageUrl,
+              ),
+              fit: BoxFit.cover,
+            )),
         footer: GridTileBar(
           // leading: IconButton(
           //   icon: Icon(Icons.favorite),
