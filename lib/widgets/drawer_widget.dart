@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/providers/auth_provider.dart';
 import 'package:flutter_complete_guide/screens/user_products_screen.dart';
+import 'package:provider/provider.dart';
 import '../screens/orders_screen.dart';
 import '../screens/products_overview_screen.dart';
 
@@ -26,6 +28,13 @@ class DrawerWidget extends StatelessWidget {
             onTap: () => Navigator.of(context)
                 .pushReplacementNamed(UserProductsScreen.ROUTE_NAME),
           ),
+          ListTile(
+              title: const Text('Log out'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacementNamed('/');
+                Provider.of<AuthProvider>(context, listen: false).logout();
+              }),
         ],
       ),
     );

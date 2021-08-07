@@ -19,9 +19,10 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> retrieveOrders() async {
     final _params = <String, String>{'auth': _token};
+
     final url = Uri.https(
         'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
-        '/orders.json/',
+        'orders/$_userId.json',
         _params);
 
     final response = await http.get(url);
@@ -50,7 +51,7 @@ class OrderProvider with ChangeNotifier {
     final _params = <String, String>{'auth': _token};
     final url = Uri.https(
         'udemy-flutter-3bb04-default-rtdb.asia-southeast1.firebasedatabase.app',
-        '/orders.json/',
+        'orders/$_userId.json',
         _params);
     final timestamp = DateTime.now();
 

@@ -4,6 +4,7 @@ import 'package:flutter_complete_guide/screens/add_edit_product_screen.dart';
 import 'package:flutter_complete_guide/screens/auth_screen.dart';
 import 'package:flutter_complete_guide/screens/orders_screen.dart';
 import 'package:flutter_complete_guide/screens/products_overview_screen.dart';
+import 'package:flutter_complete_guide/screens/splash_screen.dart';
 import 'package:flutter_complete_guide/screens/user_products_screen.dart';
 import 'providers/cart_provider.dart';
 import 'providers/order_provider.dart';
@@ -43,7 +44,14 @@ class MyApp extends StatelessWidget {
               // inputDecorationTheme: inputDecorationTheme(),
               fontFamily: 'Lato',
             ),
-            home: authData.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+            home: authData.isAuth
+                ? ProductsOverviewScreen()
+                : FutureBuilder(
+                    future: authData.tryAutoLogin(),
+                    builder: (ctx, authResult) =>
+                        authResult.connectionState == ConnectionState.waiting
+                            ? SplashScreen()
+                            : AuthScreen()),
             routes: {
               ProductDetailScreen.ROUTE_NAME: (ctx) => ProductDetailScreen(),
               CartScreen.ROUTE_NAME: (ctx) => CartScreen(),
