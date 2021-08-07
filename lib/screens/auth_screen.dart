@@ -116,13 +116,13 @@ class _AuthCardState extends State<AuthCard>
         .animate(CurvedAnimation(
             parent: _animationController, curve: Curves.linear));
 
-    _animationController.addListener(() => setState(() {}));
+    // _animationController.addListener(() => setState(() {}));
     super.initState();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    // _animationController.dispose();
     super.dispose();
   }
 
@@ -197,15 +197,19 @@ class _AuthCardState extends State<AuthCard>
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        // height: _authMode == AuthMode.Signup ? 320 : 260,
-        height: _heightAnimation.value.height,
-        constraints:
-            // BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
-            BoxConstraints(minHeight: _heightAnimation.value.height),
+      child: AnimatedBuilder(
+        animation: _heightAnimation,
+        builder: (ctx, ch) => Container(
+          // height: _authMode == AuthMode.Signup ? 320 : 260,
+          height: _heightAnimation.value.height,
+          constraints:
+              // BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+              BoxConstraints(minHeight: _heightAnimation.value.height),
 
-        width: deviceSize.width * 0.75,
-        padding: EdgeInsets.all(16.0),
+          width: deviceSize.width * 0.75,
+          padding: EdgeInsets.all(16.0),
+          child: ch,
+        ),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
